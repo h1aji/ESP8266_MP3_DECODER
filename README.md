@@ -1,30 +1,41 @@
 # I2S MP3 webradio streaming example
 
+This repo is a fork of [ESP8266_MP3_DECODER](https://github.com/espressif/esp8266_mp3_decoder) 
+which is compiled with [esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos)
+
 This is an example of how to use the I2S module inside the ESP8266 to output
-sound. In this case, it is used to output decoded MP3 data (actually, more 
-accurately: MPEG2 layer III data): the code described here basically is a 
-webradio streamer which can connect to an Icecast server, take the MP3 data 
+sound. In this case, it is used to output decoded MP3 data (actually, more
+accurately: MPEG2 layer III data): the code described here basically is a
+webradio streamer which can connect to an Icecast server, take the MP3 data
 the server sends out, decode it and output it over the I2S bus to a DAC. The
 MP3 decoder has been tested for bitrates up to 320KBit/s and sample
 rates of up to 48KHz.
 
-## Configuration options, building
 
-All high-level options can be configured in mp3/user/playerconfig.h. Edit 
-that file to set up your access point and a webradio stream or other source of
-MP3 data served over HTTP.
+## Installation
 
-To build the code, try running make.sh in the mp3/ directory. Alternatively,
-the way to use 'make' to build this code is:
-make COMPILE=gcc BOOT=none APP=0 SPI_SPEED=40 SPI_MODE=QIO SPI_SIZE=1024
+This project requires [esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos). 
+Installation guide can be found on the main page.
 
-The resulting binaries will be in the bin/ folder. Please disregard the message
-that pops up at the end of the make process: the addresses it mentions are
-wrong. The correct addresses to load the resulting files are:
+All high-level options can be configured in mp3/user/playerconfig.h. Edit that file 
+to set up your access point and a webradio stream or other source of MP3 data served over HTTP.
+
+To build the code, clone repository next to esp-open-rtos dir and run make.
+
+```sh
+$ cd ~/esp/
+$ git clone https://github.com/h1aji/ESP8266_MP3_DECODER
+$ cd karadio
+$ make
 ```
-bin/eagle.flash.bin     - 0x00000
-bin/eagle.irom0text.bin - 0xA0000
+
+Flash new image
+
+```sh
+$ make flash -j4
 ```
+* flash options can be edited in local.mk file
+
 
 ## Needed hardware
 
@@ -146,4 +157,3 @@ happens, allowing the ESP8266 to attend to other tasks.
 While the ESP8266 is able to run at 160MHz, we're leaving it at its
 default speed of 80MHz here: it seems that at that speed the ESP8266
 is perfectly capable of decoding even 320KBit MP3 data.
-
